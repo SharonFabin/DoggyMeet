@@ -8,6 +8,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 export async function requestLocationPermission() {
     try {
+        //meow test!!!!!!!!!!!!!!!!!!!!!!
         const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
