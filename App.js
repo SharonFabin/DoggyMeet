@@ -1,137 +1,86 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
+
 import React, {Component} from 'react';
-import {PermissionsAndroid, Text, View, TouchableOpacity} from 'react-native';
-import {createDrawerNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
-import FetchLocation from './components/FetchLocation';
-import Map from './components/Map';
-import Blink from './components/Blink';
-import Geolocation from 'react-native-geolocation-service';
+import {Platform, StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image} from 'react-native';
+import {createDrawerNavigator, DrawerItems, createAppContainer} from 'react-navigation';
+import {Icon} from 'native-base';
+import HomePage from './components/pages/Home';
+import SettingsPage from './components/pages/Settings';
+import NotificationPage from './components/pages/Notifications';
+import NewsPage from './components/pages/News';
 
-export async function requestLocationPermission() {
-    try {
-        //meow test!!!!!!!!!!!!!!!!!!!!!!
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-                'title': 'Example App',
-                'message': 'Example App access to your location '
+const {width} = Dimensions.get("window");
+
+const CustomDrawerNavigation = (props) => {
+    return (
+        <SafeAreaView style={{flex: 1}}>
+            <View style={{height: 150, backgroundColor: '#d2d2d2', opacity: 0.9}}>
+                <View style={{height: 100, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center'}}>
+                    <Image source={require('./assets/no-image.png')}
+                           style={{height: 150, width: 150, borderRadius: 60}}/>
+                </View>
+                <View style={{height: 50, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center'}}>
+                    <Text>John Doe</Text>
+                </View>
+            </View>
+            <ScrollView>
+                <DrawerItems {...props} />
+            </ScrollView>
+            <View style={{alignItems: "center", bottom: 20}}>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'column', marginRight: 15}}>
+                        <Icon name="flask" style={{fontSize: 24}} onPress={() => console.log("Tıkladın")}/>
+                    </View>
+                    <View style={{flexDirection: 'column'}}>
+                        <Icon name="call" style={{fontSize: 24}} onPress={() => console.log("Tıkladın")}/>
+                    </View>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
+}
+
+const Drawer = createDrawerNavigator({
+        Home: {
+            screen: HomePage,
+            navigationOptions: {
+                title: 'Homepage'
             }
-        )
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log("You can use the location")
-            alert("You can use the location");
-        } else {
-            console.log("location permission denied")
-            alert("Location permission denied");
+        },
+        Settings: {
+            screen: SettingsPage,
+            navigationOptions: {
+                title: 'Settings'
+            }
+        },
+        Notifications: {
+            screen: NotificationPage,
+            navigationOptions: {
+                title: 'Notifications'
+            }
+        },
+        News: {
+            screen: NewsPage,
+            navigationOptions: {
+                title: 'News'
+            }
         }
-    } catch (err) {
-        console.warn(err)
-    }
-}
-
-class HomeScreen extends React.Component {
-
-    static navigationOptions = {
-        title: 'Home'
-    };
-
-    render() {
-        const {navigate} = this.props.navigation;
-        return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                    <Text>Open Drawer</Text>
-                </TouchableOpacity>
-                <Text style={{fontWeight: 'bold', marginTop: 20}}>Home</Text>
-            </View>
-        );
-    }
-}
-
-class SettingsScreen extends React.Component {
-
-    static navigationOptions = {
-        title: 'Settings'
-    };
-
-    render() {
-        return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableOpacity onPress={this.props.navigation.openDrawer}>
-                    <Text>Open Drawer 1</Text>
-                </TouchableOpacity>
-                <Text style={{fontWeight: 'bold', marginTop: 20}}>Settings</Text>
-            </View>
-        );
-    }
-}
-
-const DrawerNavigator = createDrawerNavigator(
-    {
-        Home: HomeScreen,
-        Settings: SettingsScreen,
     },
     {
-        drawerBackgroundColor: 'rgba(255,255,255,.9)',
-        overlayColor: '#6b52ae',
-        contentOptions: {
-            activeTintColor: '#fff',
-            activeBackgroundColor: '#6b52ae',
-        },
+        drawerPosition: 'left',
+        contentComponent: CustomDrawerNavigation,
+        drawerOpenRoute: 'DrawerOpen',
+        drawerCloseRoute: 'DrawerClose',
+        drawerToggleRoute: 'DrawerToggle',
+        drawerWidth: (width / 3) * 2
+    });
 
-    }
-);
+const App = createAppContainer(Drawer);
 
-const MainNavigator = createStackNavigator(
-    {
-        defaultHome: DrawerNavigator
-    },
-    {
-
-        // /* The header config from HomeScreen is now here */
-        defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-            },
-        },
-    }
-);
-
-export default createAppContainer(MainNavigator);
-
-// export default class App extends Component {
-//
-//     componentDidMount() {
-//         requestLocationPermission();
-//     }
-//
-//
-//     getUserLocation = () => {
-//         Geolocation.getCurrentPosition(
-//             (position) => {
-//                 console.log(position);
-//             },
-//             (error) => {
-//                 // See error code charts below.
-//                 console.log(error.code, error.message);
-//             },
-//             {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
-//         );
-//     };
-//
-//     render() {
-//         return (
-//             <View>
-//                 <Blink text='I love to blink'/>
-//                 <Blink text='Yes blinking is so great'/>
-//                 <Blink text='Why did they ever take this out of HTML'/>
-//                 <Blink text='Look at me look at me look at me'/>
-//                 <FetchLocation onGetLocation={this.getUserLocation}/>
-//                 <Map/>
-//             </View>
-//         );
-//     }
-// }
+export default App;
