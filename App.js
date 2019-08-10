@@ -7,7 +7,7 @@ import SettingsPage from './src/views/Settings';
 import NotificationPage from './src/views/Notifications';
 import NewsPage from './src/views/News';
 import {Provider} from 'react-redux'
-import {store} from './redux/app-redux';
+import {store} from './src/index';
 import * as firebase from "firebase";
 
 const {width} = Dimensions.get("window");

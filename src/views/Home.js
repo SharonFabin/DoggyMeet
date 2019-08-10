@@ -3,19 +3,19 @@ import {Platform, View, Text, StyleSheet} from 'react-native';
 import {Header} from 'react-native-elements';
 import {Left, Right, Icon} from 'native-base';
 import {connect} from 'react-redux';
-import {watchPersonData} from "../../redux/app-redux";
+import {watchPersonData} from "../actions/index"
 
 
 const mapStateToProps = (state) => {
     return {
         personData: state.personData
     };
-}
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         watchPersonData: () => dispatch(watchPersonData())
     };
-}
+};
 
 class HomePage extends Component {
     static navigationOptions = {
