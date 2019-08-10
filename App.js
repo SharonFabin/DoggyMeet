@@ -1,28 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image} from 'react-native';
 import {createDrawerNavigator, DrawerItems, createAppContainer} from 'react-navigation';
 import {Icon} from 'native-base';
-import HomePage from './components/pages/Home';
-import SettingsPage from './components/pages/Settings';
-import NotificationPage from './components/pages/Notifications';
-import NewsPage from './components/pages/News';
+import HomePage from './src/views/Home';
+import SettingsPage from './src/views/Settings';
+import NotificationPage from './src/views/Notifications';
+import NewsPage from './src/views/News';
+import {Provider} from 'react-redux'
+import {store} from './redux/app-redux';
+import * as firebase from "firebase";
 
 const {width} = Dimensions.get("window");
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBbVvQT4jFX-Ve0JxiJaAPScA6ihvtyPsI",
+    authDomain: "doggymeet.firebaseapp.com",
+    databaseURL: "https://doggymeet.firebaseio.com",
+    projectId: "doggymeet",
+    storageBucket: "doggymeet.appspot.com",
+    messagingSenderId: "11899729004",
+    appId: "1:11899729004:web:e9c5d33da8b88f21"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 const CustomDrawerNavigation = (props) => {
     return (
         <SafeAreaView style={{flex: 1}}>
             <View style={{height: 150, backgroundColor: '#d2d2d2', opacity: 0.9}}>
                 <View style={{height: 100, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center'}}>
-                    <Image source={require('./assets/no-image.png')}
+                    <Image source={require('./src/assets/images/no-image.png')}
                            style={{height: 150, width: 150, borderRadius: 60}}/>
                 </View>
                 <View style={{height: 50, backgroundColor: 'Green', alignItems: 'center', justifyContent: 'center'}}>
@@ -81,6 +88,15 @@ const Drawer = createDrawerNavigator({
         drawerWidth: (width / 3) * 2
     });
 
-const App = createAppContainer(Drawer);
+const AppContainer = createAppContainer(Drawer);
 
-export default App;
+export default class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <AppContainer/>
+            </Provider>
+        )
+    }
+}
+
