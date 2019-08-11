@@ -1,21 +1,10 @@
 import React, {Component} from 'react';
 import {Platform, View, Text, StyleSheet} from 'react-native';
-import {Header} from 'react-native-elements';
 import {Left, Right, Icon} from 'native-base';
+import Navbar from "../components/Navbar";
 import {connect} from 'react-redux';
-import {watchPersonData} from "../actions/index"
+import {watchPersonData} from "../actions"
 
-
-const mapStateToProps = (state) => {
-    return {
-        personData: state.personData
-    };
-};
-const mapDispatchToProps = (dispatch) => {
-    return {
-        watchPersonData: () => dispatch(watchPersonData())
-    };
-};
 
 class HomePage extends Component {
     static navigationOptions = {
@@ -33,13 +22,7 @@ class HomePage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header
-                    containerStyle={{marginTop: Platform.OS === 'ios' ? 0 : -24}}
-                    placement="left"
-                    leftComponent={{icon: 'menu', color: '#fff', onPress: () => this.props.navigation.openDrawer()}}
-                    centerComponent={{text: 'MY TITLE', style: {color: '#fff'}}}
-                    rightComponent={{icon: 'home', color: '#fff'}}
-                />
+                <Navbar title='Home' navigation={this.props.navigation}/>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <Text>Home Page</Text>
                     <Text>{this.props.personData.firstName}</Text>
@@ -55,5 +38,16 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
+
+const mapStateToProps = (state) => {
+    return {
+        personData: state.firebase.personData
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        watchPersonData: () => dispatch(watchPersonData())
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

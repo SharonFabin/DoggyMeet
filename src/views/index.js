@@ -1,0 +1,8 @@
+export {default as Home} from './Home'
+export {default as Loading} from './Loading'
+export {default as Login} from './Login'
+export {default as Main} from './Main'
+export {default as News} from './News'
+export {default as Notifications} from './Notifications'
+export {default as Settings} from './Settings'
+export {default as SignUp} from './SignUp'

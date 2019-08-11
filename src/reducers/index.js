@@ -1,17 +1,12 @@
-import * as ACTIONS from "../constants/action-types";
+import {combineReducers} from 'redux';
+import {setPersonData} from './firebase';
+import auth from '../reducers/auth';
+import load from '../reducers/load';
 
-
-const initialState = {
-    personData: {}
-};
-
-const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case ACTIONS.SET_PERSON_DATA:
-            return {...state, personData: action.value};
-        default:
-            return state;
-    }
-};
+const rootReducer = combineReducers({
+    firebase: setPersonData,
+    auth,
+    load
+});
 
 export default rootReducer;

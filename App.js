@@ -1,28 +1,14 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image} from 'react-native';
-import {createDrawerNavigator, DrawerItems, createAppContainer} from 'react-navigation';
+import {createSwitchNavigator, createDrawerNavigator, DrawerItems, createAppContainer} from 'react-navigation';
 import {Icon} from 'native-base';
-import HomePage from './src/views/Home';
-import SettingsPage from './src/views/Settings';
-import NotificationPage from './src/views/Notifications';
-import NewsPage from './src/views/News';
+import * as screens from './src/views'
 import {Provider} from 'react-redux'
 import {store} from './src/index';
 import * as firebase from "firebase";
+import {firebaseConfig} from './src/settings'
 
 const {width} = Dimensions.get("window");
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBbVvQT4jFX-Ve0JxiJaAPScA6ihvtyPsI",
-    authDomain: "doggymeet.firebaseapp.com",
-    databaseURL: "https://doggymeet.firebaseio.com",
-    projectId: "doggymeet",
-    storageBucket: "doggymeet.appspot.com",
-    messagingSenderId: "11899729004",
-    appId: "1:11899729004:web:e9c5d33da8b88f21"
-};
-
-firebase.initializeApp(firebaseConfig);
 
 const CustomDrawerNavigation = (props) => {
     return (
@@ -55,25 +41,25 @@ const CustomDrawerNavigation = (props) => {
 
 const Drawer = createDrawerNavigator({
         Home: {
-            screen: HomePage,
+            screen: screens.Home,
             navigationOptions: {
                 title: 'Homepage'
             }
         },
         Settings: {
-            screen: SettingsPage,
+            screen: screens.Settings,
             navigationOptions: {
                 title: 'Settings'
             }
         },
         Notifications: {
-            screen: NotificationPage,
+            screen: screens.Notifications,
             navigationOptions: {
                 title: 'Notifications'
             }
         },
         News: {
-            screen: NewsPage,
+            screen: screens.News,
             navigationOptions: {
                 title: 'News'
             }
@@ -88,9 +74,26 @@ const Drawer = createDrawerNavigator({
         drawerWidth: (width / 3) * 2
     });
 
-const AppContainer = createAppContainer(Drawer);
+const SwitchNavigator = createSwitchNavigator({
+        Loading: screens.Loading,
+        SignUp: screens.SignUp,
+        Login: screens.Login,
+        Main: screens.Main,
+        AppNavigator: Drawer
+    }, {
+        initialRouteName: 'Loading'
+    }
+);
+
+//const AppContainer = createAppContainer(Drawer);
+const AppContainer = createAppContainer(SwitchNavigator);
 
 export default class App extends Component {
+
+    componentDidMount() {
+        //firebase.initializeApp(firebaseConfig);
+    }
+
     render() {
         return (
             <Provider store={store}>
